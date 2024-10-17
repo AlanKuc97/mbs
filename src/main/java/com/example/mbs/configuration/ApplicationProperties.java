@@ -14,8 +14,8 @@ import org.springframework.validation.annotation.Validated;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ApplicationProperties {
 
-    @NotNull
-    @Value("${spring.datasource.username}")
-    String databaseUsername;
+  @NotNull
+  @Value("${spring.datasource.username}")
+  String databaseUsername;
 
 }

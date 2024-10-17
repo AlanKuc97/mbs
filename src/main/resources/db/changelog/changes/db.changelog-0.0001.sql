@@ -3,7 +3,7 @@
 -- comment: Create schema for MBS
 CREATE TABLE `ACCOUNT` (
     `id`                    BIGINT NOT NULL AUTO_INCREMENT,
-    `number`                VARCHAR(50) NOT NULL,
+    `number`                VARCHAR(50) NOT NULL UNIQUE,
     `version_num`           BIGINT NOT NULL,
     `created_by`            VARCHAR(50) NOT NULL,
     `creation_date`         TIMESTAMP NOT NULL,
@@ -11,7 +11,7 @@ CREATE TABLE `ACCOUNT` (
     `last_modified_date`    TIMESTAMP NOT NULL,
     PRIMARY KEY (`id`)
 );
--- TODO: add unique constraints
+
 CREATE TABLE `CUSTOMER` (
     `id`                    BIGINT NOT NULL AUTO_INCREMENT,
     `name`                  VARCHAR(50) NOT NULL,
@@ -26,7 +26,8 @@ CREATE TABLE `CUSTOMER` (
     `last_modified_by`      VARCHAR(50) NOT NULL,
     `last_modified_date`    TIMESTAMP NOT NULL,
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`account_id`) REFERENCES `ACCOUNT` (id)
+    FOREIGN KEY (`account_id`) REFERENCES `ACCOUNT` (id),
+    CONSTRAINT customer_unique UNIQUE (`name`, `last_name`, `phone_number`, `email`)
 );
 
 CREATE TABLE `ADDRESS` (
@@ -40,7 +41,8 @@ CREATE TABLE `ADDRESS` (
     `creation_date`         TIMESTAMP NOT NULL,
     `last_modified_by`      VARCHAR(50) NOT NULL,
     `last_modified_date`    TIMESTAMP NOT NULL,
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    CONSTRAINT address_unique UNIQUE (`street`, `city`, `state`, `zip_code`)
 );
 
 CREATE TABLE `ADDRESS_CUSTOMER` (
@@ -49,5 +51,6 @@ CREATE TABLE `ADDRESS_CUSTOMER` (
     `address_id`            BIGINT NOT NULL,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`customer_id`) REFERENCES `CUSTOMER` (id),
-    FOREIGN KEY (`address_id`) REFERENCES `ADDRESS` (id)
+    FOREIGN KEY (`address_id`) REFERENCES `ADDRESS` (id),
+    CONSTRAINT address_customer_unique UNIQUE (`customer_id`, `address_id`)
 );

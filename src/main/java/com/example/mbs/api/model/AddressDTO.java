@@ -6,20 +6,21 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
+@SuppressWarnings("checkstyle:AbbreviationAsWordInName")
 @Data
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AddressDTO {
 
-    @NotNull
-    Long id;
-    @NotNull
-    String street;
-    @NotNull
-    String city;
-    @NotNull
-    String state;
-    @NotNull
-    String zipCode;
+  @NotNull
+  Long id;
+  @NotNull
+  String street;
+  @NotNull
+  String city;
+  @NotNull
+  String state;
+  @NotNull
+  String zipCode;
 
 }

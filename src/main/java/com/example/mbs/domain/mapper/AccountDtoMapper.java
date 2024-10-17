@@ -8,12 +8,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AccountDtoMapper {
 
-    public static AccountDTO dtoOf(Account entity) {
-        return AccountDTO.builder()
-            .id(entity.getId())
-            .number(entity.getNumber())
-            .numberOfOwners(entity.getNumberOfOwners())
-            .build();
-    }
+  public static AccountDTO dtoOf(Account entity) {
+    return AccountDTO.builder()
+      .id(entity.getId())
+      .number(entity.getNumber())
+      .numberOfOwners(entity.getNumberOfOwners())
+      .build();
+  }
 
 }

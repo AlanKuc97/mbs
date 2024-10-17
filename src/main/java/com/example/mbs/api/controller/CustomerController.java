@@ -1,7 +1,7 @@
 package com.example.mbs.api.controller;
 
-import com.example.mbs.api.model.CustomerDTO;
 import com.example.mbs.api.model.CustomerCreateDTO;
+import com.example.mbs.api.model.CustomerDTO;
 import com.example.mbs.domain.service.CustomerService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -22,11 +22,11 @@ import org.springframework.web.bind.annotation.RestController;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CustomerController {
 
-    CustomerService customerService;
+  CustomerService customerService;
 
-    @PostMapping
-    public ResponseEntity<CustomerDTO> createCustomer(@RequestBody CustomerCreateDTO dto) {
-        return ResponseEntity.ok(customerService.createCustomer(dto));
-    }
+  @PostMapping
+  public ResponseEntity<CustomerDTO> createCustomer(@RequestBody CustomerCreateDTO dto) {
+    return ResponseEntity.ok(customerService.createCustomer(dto));
+  }
 
 }
