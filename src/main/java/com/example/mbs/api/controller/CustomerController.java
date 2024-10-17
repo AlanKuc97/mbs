@@ -2,6 +2,7 @@ package com.example.mbs.api.controller;
 
 import com.example.mbs.api.model.CustomerCreateDTO;
 import com.example.mbs.api.model.CustomerDTO;
+import com.example.mbs.api.model.error.InvalidDataApiException;
 import com.example.mbs.domain.service.CustomerService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,9 @@ public class CustomerController {
 
   @PostMapping
   public ResponseEntity<CustomerDTO> createCustomer(@RequestBody CustomerCreateDTO dto) {
-    return ResponseEntity.ok(customerService.createCustomer(dto));
+    return customerService.createCustomer(dto)
+      .map(ResponseEntity::ok)
+      .orElseThrow(() -> new InvalidDataApiException("Invalid customer data provided"));
   }
 
 }
