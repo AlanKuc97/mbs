@@ -2,20 +2,17 @@ package com.example.mbs.api.model;
 
 import jakarta.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
-import java.util.Set;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
-@SuppressWarnings("checkstyle:AbbreviationAsWordInName")
 @Data
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class CustomerDTO {
+public class CustomerSave {
 
-  @NotNull
-  Long id;
   @NotNull
   String name;
   @NotNull
@@ -29,8 +26,8 @@ public class CustomerDTO {
   @NotNull
   CustomerType type;
   @NotNull
-  Set<AddressDTO> addresses;
+  List<Long> addressesId;
   @NotNull
-  AccountDTO account;
+  Long accountId;
 
 }

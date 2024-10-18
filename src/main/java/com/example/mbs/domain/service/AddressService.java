@@ -1,10 +1,10 @@
 package com.example.mbs.domain.service;
 
-import com.example.mbs.api.model.AddressDTO;
-import com.example.mbs.domain.mapper.AddressDtoMapper;
+import com.example.mbs.api.model.Address;
+import com.example.mbs.domain.mapper.AddressMapper;
 import com.example.mbs.persistence.repository.AddressRepository;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -21,17 +21,17 @@ public class AddressService {
   AddressRepository addressRepository;
 
   @Transactional(readOnly = true)
-  public Optional<AddressDTO> getAddress(Long id) {
+  public Optional<Address> getAddress(Long id) {
     return addressRepository.findById(id)
-      .map(AddressDtoMapper::dtoOf);
+      .map(AddressMapper::dtoOf);
   }
 
   @Transactional(readOnly = true)
-  public Set<AddressDTO> getAddresses(Set<Long> ids) {
+  public List<Address> getAddresses(List<Long> ids) {
     return ids.stream()
       .map(this::getAddress)
       .flatMap(Optional::stream)
-      .collect(Collectors.toSet());
+      .collect(Collectors.toList());
   }
 
 }

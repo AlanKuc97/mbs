@@ -1,7 +1,7 @@
 package com.example.mbs.domain.service;
 
-import com.example.mbs.api.model.AccountDTO;
-import com.example.mbs.domain.mapper.AccountDtoMapper;
+import com.example.mbs.api.model.Account;
+import com.example.mbs.domain.mapper.AccountMapper;
 import com.example.mbs.persistence.repository.AccountRepository;
 import java.util.Optional;
 import lombok.AccessLevel;
@@ -18,9 +18,9 @@ public class AccountService {
   AccountRepository accountRepository;
 
   @Transactional(readOnly = true)
-  public Optional<AccountDTO> getAccount(Long id) {
+  public Optional<Account> getAccount(Long id) {
     return accountRepository.findById(id)
-        .map(AccountDtoMapper::dtoOf);
+        .map(AccountMapper::dtoOf);
   }
 
 }

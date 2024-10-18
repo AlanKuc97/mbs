@@ -4,6 +4,7 @@ import com.example.mbs.api.model.error.ApiException;
 import com.example.mbs.api.model.error.Error;
 import com.example.mbs.api.model.error.ErrorType;
 import jakarta.annotation.Nullable;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -25,6 +26,16 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
       HttpStatus.INTERNAL_SERVER_ERROR,
       null
     );
+  }
+
+  @ExceptionHandler(IllegalArgumentException.class)
+  public ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException ex) {
+    return handleException(ErrorType.INVALID_DATA, ex, HttpStatus.BAD_REQUEST, ex.getMessage());
+  }
+
+  @ExceptionHandler(EntityNotFoundException.class)
+  public ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException ex) {
+    return handleException(ErrorType.NOT_FOUND, ex, HttpStatus.BAD_REQUEST, ex.getMessage());
   }
 
   @ExceptionHandler(ApiException.class)

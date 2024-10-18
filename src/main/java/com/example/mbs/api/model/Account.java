@@ -6,11 +6,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
-@SuppressWarnings("checkstyle:AbbreviationAsWordInName")
 @Data
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class AccountDTO {
+public class Account {
 
   @NotNull
   Long id;
@@ -18,5 +17,7 @@ public class AccountDTO {
   String number;
   @NotNull
   Long numberOfOwners;
+  @NotNull
+  Long versionNum;
 
 }

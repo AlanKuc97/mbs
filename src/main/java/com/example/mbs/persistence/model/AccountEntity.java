@@ -1,37 +1,41 @@
 package com.example.mbs.persistence.model;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.envers.Audited;
 
-@EqualsAndHashCode(callSuper = true)
 @Entity
-@Data
-@AllArgsConstructor
+@Table(name = "Account")
+@Getter
 @NoArgsConstructor(force = true)
+@AllArgsConstructor
 @SuperBuilder
 @Audited
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class Account extends BaseEntity {
+public class AccountEntity extends BaseEntity {
 
   String number;
-  @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
-  Set<Customer> customers;
+  @OneToMany(
+      mappedBy = "accountEntity",
+      fetch = FetchType.EAGER
+  )
+  List<CustomerEntity> customerEntities;
 
+  //TODO: debug this if there will be time left
   public Long getNumberOfOwners() {
     return Long.valueOf(
-      Optional.ofNullable(customers)
-      .map(Set::size)
+      Optional.ofNullable(customerEntities)
+      .map(List::size)
       .orElse(0)
     );
   }

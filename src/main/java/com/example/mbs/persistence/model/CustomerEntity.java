@@ -8,30 +8,29 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import java.time.OffsetDateTime;
-import java.util.Set;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.envers.Audited;
 
 @SuppressWarnings("checkstyle:MemberName")
-@EqualsAndHashCode(callSuper = true)
 @Entity
-@Data
+@Table(name = "Customer")
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
 @SuperBuilder
 @Audited
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class Customer extends BaseEntity {
+public class CustomerEntity extends BaseEntity {
 
   String name;
-
   String last_name;
   String phone_number;
   String email;
@@ -44,9 +43,9 @@ public class Customer extends BaseEntity {
       joinColumns = @JoinColumn(name = "customer_id"),
       inverseJoinColumns = @JoinColumn(name = "address_id")
   )
-  Set<Address> addresses;
+  List<AddressEntity> addressEntities;
   @ManyToOne
   @JoinColumn(name = "account_id")
-  Account account;
+  AccountEntity accountEntity;
 
 }
