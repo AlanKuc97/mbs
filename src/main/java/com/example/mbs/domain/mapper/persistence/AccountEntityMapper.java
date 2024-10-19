@@ -25,8 +25,6 @@ public class AccountEntityMapper {
         .version_num(dto.getVersionNum())
         // I don't like this approach and I would use triggers
         // for the rest of the fields with normal DB like MySQL/MariaDB/MSSQL/OracleDB
-        // TODO: use docker-compose, MariaDB image and triggers. After that make mapper static
-        //  and remove fields below
         .created_by(applicationProperties.getDatabaseUsername())
         .creation_date(LocalDateTime.now())
         .last_modified_by(applicationProperties.getDatabaseUsername())

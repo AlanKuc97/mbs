@@ -19,6 +19,7 @@ CREATE TABLE `CUSTOMER` (
     `phone_number`          VARCHAR(20) NOT NULL,
     `email`                 VARCHAR(50) NOT NULL,
     `birth_date`            TIMESTAMP NOT NULL,
+    `type`                  VARCHAR(20) NOT NULL,
     `account_id`            BIGINT NOT NULL,
     `version_num`           BIGINT NOT NULL,
     `created_by`            VARCHAR(50) NOT NULL,
@@ -27,7 +28,8 @@ CREATE TABLE `CUSTOMER` (
     `last_modified_date`    TIMESTAMP NOT NULL,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`account_id`) REFERENCES `ACCOUNT` (id),
-    CONSTRAINT customer_unique UNIQUE (`name`, `last_name`, `phone_number`, `email`)
+    CONSTRAINT customer_unique UNIQUE (`name`, `last_name`, `phone_number`, `email`),
+    CONSTRAINT check_customer_type CHECK (`type` IN ('PRIVATE', 'INDIVIDUAL', 'PUBLIC'))
 );
 
 CREATE TABLE `ADDRESS` (

@@ -30,4 +30,29 @@ public class CustomerMapper {
       .build();
   }
 
+  public static Customer dtoOf(CustomerEntity entity) {
+    return Customer.builder()
+      .id(entity.getId())
+      .name(entity.getName())
+      .lastName(entity.getLast_name())
+      .phoneNumber(entity.getPhone_number())
+      .email(entity.getEmail())
+      .birthDate(entity.getBirth_date())
+      .type(entity.getType())
+      .versionNum(entity.getVersion_num())
+      .account(AccountMapper.dtoOf(entity.getAccount()))
+      .addresses(AddressMapper.dtosOf(entity.getAddresses()))
+      .build();
+  }
+
+  public static List<Customer> dtosOf(List<CustomerEntity> entities) {
+    return entities.stream()
+      .map(entity -> dtoOf(
+        entity,
+        AccountMapper.dtoOf(entity.getAccount()),
+        AddressMapper.dtosOf(entity.getAddresses())
+      ))
+      .toList();
+  }
+
 }

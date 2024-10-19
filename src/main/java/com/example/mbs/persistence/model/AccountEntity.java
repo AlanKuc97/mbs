@@ -15,7 +15,7 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.envers.Audited;
 
 @Entity
-@Table(name = "Account")
+@Table(name = "ACCOUNT")
 @Getter
 @NoArgsConstructor(force = true)
 @AllArgsConstructor
@@ -26,15 +26,14 @@ public class AccountEntity extends BaseEntity {
 
   String number;
   @OneToMany(
-      mappedBy = "accountEntity",
+      mappedBy = "account",
       fetch = FetchType.EAGER
   )
-  List<CustomerEntity> customerEntities;
+  List<CustomerEntity> customers;
 
-  //TODO: debug this if there will be time left
   public Long getNumberOfOwners() {
     return Long.valueOf(
-      Optional.ofNullable(customerEntities)
+      Optional.ofNullable(customers)
       .map(List::size)
       .orElse(0)
     );

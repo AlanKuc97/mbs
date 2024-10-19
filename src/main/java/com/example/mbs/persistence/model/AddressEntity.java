@@ -13,7 +13,7 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.envers.Audited;
 
 @Entity
-@Table(name = "Address")
+@Table(name = "ADDRESS")
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
@@ -26,7 +26,7 @@ public class AddressEntity extends BaseEntity {
   String city;
   String state;
   String zipCode;
-  @ManyToMany(mappedBy = "addressEntities")
-  List<CustomerEntity> customerEntities;
+  @ManyToMany(mappedBy = "addresses")
+  List<CustomerEntity> customers;
 
 }

@@ -5,7 +5,6 @@ import com.example.mbs.domain.mapper.AddressMapper;
 import com.example.mbs.persistence.repository.AddressRepository;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -31,7 +30,7 @@ public class AddressService {
     return ids.stream()
       .map(this::getAddress)
       .flatMap(Optional::stream)
-      .collect(Collectors.toList());
+      .toList();
   }
 
 }

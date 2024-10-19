@@ -6,7 +6,6 @@ import com.example.mbs.persistence.model.AddressEntity;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -30,8 +29,6 @@ public class AddressEntityMapper {
         .version_num(address.getVersionNum())
         // I don't like this approach and I would use triggers
         // for the rest of the fields with normal DB like MySQL/MariaDB/MSSQL/OracleDB
-        // TODO: use docker-compose, MariaDB image and triggers. After that make mapper static
-        //  and remove fields below
         .created_by(applicationProperties.getDatabaseUsername())
         .creation_date(LocalDateTime.now())
         .last_modified_by(applicationProperties.getDatabaseUsername())
@@ -44,7 +41,7 @@ public class AddressEntityMapper {
     return addresses.stream()
       .map(this::entityOf)
       .flatMap(Optional::stream)
-      .collect(Collectors.toList());
+      .toList();
   }
 
 }

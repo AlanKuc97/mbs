@@ -21,7 +21,7 @@ import org.hibernate.envers.Audited;
 
 @SuppressWarnings("checkstyle:MemberName")
 @Entity
-@Table(name = "Customer")
+@Table(name = "CUSTOMER")
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
@@ -43,9 +43,9 @@ public class CustomerEntity extends BaseEntity {
       joinColumns = @JoinColumn(name = "customer_id"),
       inverseJoinColumns = @JoinColumn(name = "address_id")
   )
-  List<AddressEntity> addressEntities;
+  List<AddressEntity> addresses;
   @ManyToOne
   @JoinColumn(name = "account_id")
-  AccountEntity accountEntity;
+  AccountEntity account;
 
 }

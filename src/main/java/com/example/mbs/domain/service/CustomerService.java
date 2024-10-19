@@ -4,22 +4,22 @@ import com.example.mbs.api.model.Account;
 import com.example.mbs.api.model.Address;
 import com.example.mbs.api.model.Customer;
 import com.example.mbs.api.model.CustomerSave;
+import com.example.mbs.api.model.CustomerSearch;
 import com.example.mbs.domain.mapper.CustomerMapper;
 import com.example.mbs.domain.mapper.persistence.CustomerEntityMapper;
-import com.example.mbs.persistence.model.BaseEntity;
 import com.example.mbs.persistence.model.CustomerEntity;
 import com.example.mbs.persistence.repository.CustomerRepository;
 import jakarta.annotation.Nullable;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,7 +48,9 @@ public class CustomerService {
           .orElseThrow(() -> new IllegalArgumentException("Customer cannot exist without address"));
 
       return Optional.of(
-        dtoOf(customerRepository.saveAndFlush(entityOf(id, dto, account, addresses)))
+        CustomerMapper.dtoOf(
+          customerRepository.saveAndFlush(entityOf(id, dto, account, addresses))
+        )
       );
     } catch (DataIntegrityViolationException e) {
       log.error(e.getMessage());
@@ -57,9 +59,19 @@ public class CustomerService {
   }
 
   @Transactional(readOnly = true)
+  public CustomerSearch getCustomersBySearchTerm(String searchTerm, int page, int size) {
+    Page<CustomerEntity> customerPage =
+        customerRepository.findBySearchTerm(searchTerm, PageRequest.of(page, size));
+    return CustomerSearch.builder()
+      .customers(CustomerMapper.dtosOf(customerPage.getContent()))
+      .totalElements(customerPage.getContent().size())
+      .build();
+  }
+
+  @Transactional(readOnly = true)
   public Optional<Customer> getCustomer(Long id) {
     return customerRepository.findById(id)
-      .map(this::dtoOf);
+      .map(CustomerMapper::dtoOf);
   }
 
   private CustomerEntity entityOf(
@@ -78,24 +90,6 @@ public class CustomerService {
         addresses
       )
       .orElseThrow(() -> new IllegalArgumentException("Customer data is necessary"));
-  }
-
-  private Customer dtoOf(CustomerEntity entity) {
-    return CustomerMapper.dtoOf(
-      entity,
-      accountService.getAccount(entity.getAccountEntity().getId())
-        .orElseThrow(() -> new EntityNotFoundException(
-          String.format(
-            "Account not found with id %s",
-            entity.getAccountEntity().getId()
-          )
-        )),
-      addressService.getAddresses(
-        entity.getAddressEntities().stream()
-          .map(BaseEntity::getId)
-          .collect(Collectors.toList())
-      )
-    );
   }
 
 }

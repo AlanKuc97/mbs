@@ -2,6 +2,7 @@ package com.example.mbs.domain.mapper;
 
 import com.example.mbs.api.model.Address;
 import com.example.mbs.persistence.model.AddressEntity;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -17,6 +18,12 @@ public class AddressMapper {
       .zipCode(entity.getZipCode())
       .versionNum(entity.getVersion_num())
       .build();
+  }
+
+  public static List<Address> dtosOf(List<AddressEntity> entities) {
+    return entities.stream()
+      .map(AddressMapper::dtoOf)
+      .toList();
   }
 
 }
