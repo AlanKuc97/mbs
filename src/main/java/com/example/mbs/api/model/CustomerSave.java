@@ -24,7 +24,7 @@ public class CustomerSave {
   @NotNull
   OffsetDateTime birthDate;
   @NotNull
-  CustomerType type;
+  String type;
   @NotNull
   List<Long> addressesId;
   @NotNull

@@ -1,9 +1,6 @@
 package com.example.mbs.persistence.model;
 
-import com.example.mbs.api.model.CustomerType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
@@ -17,10 +14,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.envers.Audited;
 
 @SuppressWarnings("checkstyle:MemberName")
 @Entity
+@DynamicUpdate
 @Table(name = "CUSTOMER")
 @Getter
 @AllArgsConstructor
@@ -35,8 +34,7 @@ public class CustomerEntity extends BaseEntity {
   String phone_number;
   String email;
   OffsetDateTime birth_date;
-  @Enumerated(EnumType.STRING)
-  CustomerType type;
+  String type;
   @ManyToMany
   @JoinTable(
       name = "address_customer",

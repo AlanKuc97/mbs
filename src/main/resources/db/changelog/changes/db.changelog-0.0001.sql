@@ -12,6 +12,12 @@ CREATE TABLE `ACCOUNT` (
     PRIMARY KEY (`id`)
 );
 
+CREATE TABLE `CUSTOMER_TYPE` (
+    `code`                  VARCHAR(20) NOT NULL UNIQUE,
+    `description`             VARCHAR(50) NOT NULL,
+    PRIMARY KEY (`code`)
+);
+
 CREATE TABLE `CUSTOMER` (
     `id`                    BIGINT NOT NULL AUTO_INCREMENT,
     `name`                  VARCHAR(50) NOT NULL,
@@ -29,7 +35,7 @@ CREATE TABLE `CUSTOMER` (
     PRIMARY KEY (`id`),
     FOREIGN KEY (`account_id`) REFERENCES `ACCOUNT` (id),
     CONSTRAINT customer_unique UNIQUE (`name`, `last_name`, `phone_number`, `email`),
-    CONSTRAINT check_customer_type CHECK (`type` IN ('PRIVATE', 'INDIVIDUAL', 'PUBLIC'))
+    CONSTRAINT check_customer_type CHECK (`type` IN (SELECT code FROM `CUSTOMER_TYPE`))
 );
 
 CREATE TABLE `ADDRESS` (

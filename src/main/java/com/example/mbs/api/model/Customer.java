@@ -26,7 +26,7 @@ public class Customer {
   @NotNull
   OffsetDateTime birthDate;
   @NotNull
-  CustomerType type;
+  String type;
   @NotNull
   Long versionNum;
   @NotNull

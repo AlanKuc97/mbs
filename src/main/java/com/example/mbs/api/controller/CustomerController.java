@@ -8,8 +8,11 @@ import com.example.mbs.domain.service.CustomerService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.UnexpectedRollbackException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(
@@ -32,9 +36,12 @@ public class CustomerController {
 
   @PostMapping
   public ResponseEntity<Customer> createCustomer(@RequestBody CustomerSave dto) {
-    return customerService.saveCustomer(null, dto)
-      .map(ResponseEntity::ok)
-      .orElseThrow(() -> new InvalidDataApiException("Invalid create customer data provided"));
+    try {
+      return ResponseEntity.ok(customerService.saveCustomer(null, dto));
+    } catch (DataIntegrityViolationException | UnexpectedRollbackException e) {
+      log.error(e.getMessage());
+      throw new InvalidDataApiException("Invalid create customer data provided");
+    }
   }
 
   // I will not allow updating addresses inside customer update endpoint because same address
@@ -46,9 +53,12 @@ public class CustomerController {
       @PathVariable Long id,
       @RequestBody CustomerSave dto
   ) {
-    return customerService.saveCustomer(id, dto)
-      .map(ResponseEntity::ok)
-      .orElseThrow(() -> new InvalidDataApiException("Invalid update customer data provided"));
+    try {
+      return ResponseEntity.ok(customerService.saveCustomer(id, dto));
+    } catch (DataIntegrityViolationException | UnexpectedRollbackException e) {
+      log.error(e.getMessage());
+      throw new InvalidDataApiException("Invalid update customer data provided");
+    }
   }
 
   @GetMapping("/search")
@@ -57,7 +67,7 @@ public class CustomerController {
       @RequestParam int page,
       @RequestParam int size
   ) {
-    return ResponseEntity.ok(customerService.getCustomersBySearchTerm(searchTerm, page, size));
+    return ResponseEntity.ok(customerService.getCustomerSearch(searchTerm, page, size));
   }
 
 }

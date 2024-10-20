@@ -17,11 +17,9 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
@@ -31,35 +29,26 @@ import org.springframework.transaction.annotation.Transactional;
 public class CustomerService {
 
   CustomerRepository customerRepository;
-  CustomerEntityMapper customerEntityMapper;
   AddressService addressService;
   AccountService accountService;
 
-  //TODO: think about propagation
-  @Transactional(propagation = Propagation.NEVER)
-  public Optional<Customer> saveCustomer(@Nullable Long id, @NotNull CustomerSave dto) {
-    try {
-      Account account = Optional.ofNullable(dto.getAccountId())
-          .flatMap(accountService::getAccount)
-          .orElseThrow(() -> new IllegalArgumentException("Customer cannot exist without account"));
+  @Transactional
+  public Customer saveCustomer(@Nullable Long id, @NotNull CustomerSave dto) {
+    Account account = Optional.ofNullable(dto.getAccountId())
+        .flatMap(accountService::getAccount)
+        .orElseThrow(() -> new IllegalArgumentException("Customer cannot exist without account"));
 
-      List<Address> addresses = Optional.ofNullable(dto.getAddressesId())
-          .map(addressService::getAddresses)
-          .orElseThrow(() -> new IllegalArgumentException("Customer cannot exist without address"));
+    List<Address> addresses = Optional.ofNullable(dto.getAddressesId())
+        .map(addressService::getAddresses)
+        .orElseThrow(() -> new IllegalArgumentException("Customer cannot exist without address"));
 
-      return Optional.of(
-        CustomerMapper.dtoOf(
-          customerRepository.saveAndFlush(entityOf(id, dto, account, addresses))
-        )
-      );
-    } catch (DataIntegrityViolationException e) {
-      log.error(e.getMessage());
-      return Optional.empty();
-    }
+    return CustomerMapper.dtoOf(
+      customerRepository.saveAndFlush(entityOf(id, dto, account, addresses))
+    );
   }
 
   @Transactional(readOnly = true)
-  public CustomerSearch getCustomersBySearchTerm(String searchTerm, int page, int size) {
+  public CustomerSearch getCustomerSearch(String searchTerm, int page, int size) {
     Page<CustomerEntity> customerPage =
         customerRepository.findBySearchTerm(searchTerm, PageRequest.of(page, size));
     return CustomerSearch.builder()
@@ -80,7 +69,7 @@ public class CustomerService {
       Account account,
       List<Address> addresses
   ) {
-    return customerEntityMapper.entityOf(
+    return CustomerEntityMapper.entityOf(
         id,
         Optional.ofNullable(id)
           .flatMap(customerId -> getCustomer(customerId).map(Customer::getVersionNum))

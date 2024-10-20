@@ -1,6 +1,11 @@
 -- liquibase formatted sql
 -- changeset alanas:2
--- comment: Insert initial data for accounts and addresses
+-- comment: Insert initial data for accounts, addresses and customer type
+INSERT INTO CUSTOMER_TYPE (code, description) VALUES
+('PRIVATE', 'Private customer type'),
+('INDIVIDUAL', 'Individual customer type'),
+('PUBLIC', 'Public customer type');
+
 INSERT INTO ACCOUNT (number, version_num, created_by, creation_date, last_modified_by, last_modified_date) VALUES
 ('ES2328231082319856314990', 1, 'davidguerrero', '2023-08-09 02:13:25', 'davidguerrero', '2023-08-09 02:13:25'),
 ('FR7206311239089079284448', 1, 'melissa73', '2021-12-11 05:18:28', 'melissa73', '2021-12-11 05:18:28'),
