@@ -10,6 +10,7 @@ import com.example.mbs.domain.mapper.persistence.CustomerEntityMapper;
 import com.example.mbs.persistence.model.CustomerEntity;
 import com.example.mbs.persistence.repository.CustomerRepository;
 import jakarta.annotation.Nullable;
+import jakarta.persistence.EntityManager;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class CustomerService {
 
   CustomerRepository customerRepository;
+  EntityManager entityManager;
   AddressService addressService;
   AccountService accountService;
 
@@ -42,9 +44,9 @@ public class CustomerService {
         .map(addressService::getAddresses)
         .orElseThrow(() -> new IllegalArgumentException("Customer cannot exist without address"));
 
-    return CustomerMapper.dtoOf(
-      customerRepository.saveAndFlush(entityOf(id, dto, account, addresses))
-    );
+    CustomerEntity entity = customerRepository.saveAndFlush(entityOf(id, dto, account, addresses));
+    entityManager.refresh(entity.getAccount());
+    return CustomerMapper.dtoOf(entity);
   }
 
   @Transactional(readOnly = true)
